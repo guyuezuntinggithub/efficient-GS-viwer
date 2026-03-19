@@ -13,7 +13,7 @@ void main() {
     if (alpha < (1.0 / 255.0)) discard;
 
     // Sort-free weighted accumulation (mobile-friendly weighted blend variant)
-    float phi = 1.0;
+    float phi = 1.0; // TODO: replace with MLP-predicted phi from compute/inference pass
     float weight = exp(0.05 / vViewDepth) + phi / (vViewDepth * vViewDepth) + phi * phi;
 
     vec3 c = vColorOpacity.rgb * alpha * weight;

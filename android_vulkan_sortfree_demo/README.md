@@ -49,3 +49,22 @@ bash scripts/package_android_demo.sh
 ```
 
 默认输出：`artifacts/android_vulkan_sortfree_demo.zip`
+
+
+## Vulkan 能做 MLP 推理吗？
+
+可以。**Vulkan 本身是通用 GPU 计算 API（通过 Compute Pipeline）**，能实现矩阵乘、激活函数、归一化等算子，因此可以做 MLP 推理。
+
+常见实现路线：
+1. **纯 Vulkan Compute Shader**：自己写算子（MatMul/MLP），延迟最低、可深度定制；
+2. **ncnn / MNN / TFLite(GPU delegate)**：把 MLP 交给移动端推理框架，再与 Vulkan 渲染共享数据；
+3. **混合方案**：小 MLP（如 opacity/phi）用 compute shader，复杂网络交给推理框架。
+
+### 本 Demo 当前状态
+
+- 当前 fragment shader 里 `phi` 是固定值（`phi = 1.0`），属于“无 MLP 的近似版本”。
+- 如果要对齐 Mobile-GS 思路，可把 `phi/opacity` 的 MLP 推理接入到：
+  - 渲染前的 compute pass（生成每个高斯的 `phi/opacity` buffer），或
+  - 每帧按视角更新的小批量推理缓存。
+
+简言之：**Vulkan 具备 MLP 推理能力**，只是当前 demo 还没把这条链路接上。
