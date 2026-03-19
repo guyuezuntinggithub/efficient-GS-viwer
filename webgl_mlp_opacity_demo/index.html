@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>WebGL2 Vertex-MLP Opacity Demo</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #111; }
+    #c { width: 100%; height: 100%; display: block; }
+    #hud {
+      position: fixed; left: 12px; top: 12px; color: #eee; font: 13px/1.4 monospace;
+      background: rgba(0,0,0,.4); padding: 8px 10px; border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+  <div id="hud">Drag to orbit · Wheel to zoom · Opacity from Vertex-MLP</div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
