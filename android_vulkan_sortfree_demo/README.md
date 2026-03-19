@@ -81,3 +81,18 @@ bash scripts/package_android_demo.sh
   3. 工程上更常见做法是用 ncnn/MNN/TFLite 处理推理，渲染层走 OpenGL/Vulkan。
 
 结论：**OpenGL 不是“不能推理”，而是“能推但一般不是最优选”**。
+
+
+## Viewer 里要不要也做 `alpha` 阈值截断？
+
+建议做，尤其在移动端。
+
+- 这类阈值（例如 `alpha < 1/255` 直接跳过）能减少大量“几乎不可见”的像素贡献累积。
+- 在 Vulkan 里完全可以实现：
+  1. 在 fragment shader 里做阈值判断并 `discard`；
+  2. 或在 compute pass 先做贡献筛选，再进入 raster/compose。
+
+本 demo 当前就用了该策略（fragment 阶段低 alpha 直接丢弃）。
+
+> 结论：
+> **viewer 端建议保留这个优化，Vulkan 支持并且实现成本低。**
