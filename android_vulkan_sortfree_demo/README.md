@@ -68,3 +68,16 @@ bash scripts/package_android_demo.sh
   - 每帧按视角更新的小批量推理缓存。
 
 简言之：**Vulkan 具备 MLP 推理能力**，只是当前 demo 还没把这条链路接上。
+
+
+## OpenGL 能做 MLP 推理吗？
+
+可以，但通常不如 Vulkan/专用推理框架好用。
+
+- **能做**：OpenGL/OpenGL ES 也能用 fragment/compute shader 实现矩阵乘和激活函数，所以理论上可跑 MLP。
+- **限制**：
+  1. 在移动端 OpenGL ES 上，通用计算能力和调试体验通常弱于 Vulkan Compute；
+  2. 内存/同步/跨 pass 数据组织不如 Vulkan 灵活；
+  3. 工程上更常见做法是用 ncnn/MNN/TFLite 处理推理，渲染层走 OpenGL/Vulkan。
+
+结论：**OpenGL 不是“不能推理”，而是“能推但一般不是最优选”**。
